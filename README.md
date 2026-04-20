@@ -16,7 +16,18 @@ conteneurisé, testé, CI.
 
 ---
 
-## Démarrage rapide
+## Démo live
+
+**→ [thibaudplanqueel.github.io/lorenz-lab](https://thibaudplanqueel.github.io/lorenz-lab/)**
+
+L'animation Canvas, le choix des systèmes, les formules KaTeX et la structure
+générale tournent côté client. Le bouton *Analyser* est désactivé sur la démo
+en ligne (pas de backend Python sur GitHub Pages) — pour l'activer, voir
+*Démarrage complet* ci-dessous.
+
+---
+
+## Démarrage complet (avec analyse)
 
 ```bash
 make up

@@ -114,21 +114,44 @@ ready(() => {
     });
   });
 
-  // Bouton d'analyse
+  // Bouton d'analyse — avec détection de la disponibilité de l'API.
+  // Sur GitHub Pages il n'y a pas de backend Python : on désactive proprement
+  // le bouton et on affiche un message explicatif, plutôt que de laisser
+  // l'utilisateur cliquer et recevoir une erreur réseau.
   const analyzeBtn = document.querySelector<HTMLButtonElement>("#analyze");
   const output = document.querySelector<HTMLElement>("#analysis-output");
   if (analyzeBtn && output) {
-    analyzeBtn.addEventListener("click", async () => {
-      analyzeBtn.disabled = true;
-      output.textContent = "Calcul en cours...";
-      try {
-        const result = await app.analyze();
-        output.textContent = formatResult(result);
-      } catch (err) {
-        const msg = err instanceof Error ? err.message : String(err);
-        output.textContent = `Erreur : ${msg}`;
-      } finally {
-        analyzeBtn.disabled = false;
+    // Ping rapide de l'API au démarrage. Si KO → mode "démo statique".
+    const client = new AnalysisClient(API_URL);
+    client.health().then((alive) => {
+      if (alive) {
+        analyzeBtn.addEventListener("click", async () => {
+          analyzeBtn.disabled = true;
+          output.textContent = "Calcul en cours...";
+          try {
+            const result = await app.analyze();
+            output.textContent = formatResult(result);
+          } catch (err) {
+            const msg = err instanceof Error ? err.message : String(err);
+            output.textContent = `Erreur : ${msg}`;
+          } finally {
+            analyzeBtn.disabled = false;
+          }
+        });
+      } else {
+        // Mode démo statique : bouton désactivé avec tooltip explicatif.
+        analyzeBtn.disabled = true;
+        analyzeBtn.title =
+          "L'API Python n'est pas disponible dans cette démo. " +
+          "Pour activer l'analyse, clone le repo et lance `docker compose up`.";
+        analyzeBtn.setAttribute("aria-disabled", "true");
+        output.innerHTML =
+          `<span style="color:#57534e;font-style:italic;">` +
+          `Démo statique : l'animation et les formules tournent côté client (TypeScript), ` +
+          `mais l'analyse (stats, FFT, Lyapunov) nécessite l'API Python. ` +
+          `Pour l'essayer, voir <a href="https://github.com/thibaudplanqueel/lorenz-lab" ` +
+          `style="color:#96380c;">les instructions</a> du repo.` +
+          `</span>`;
       }
     });
   }
