@@ -16,3 +16,11 @@ target-version = "py311"
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "UP", "B", "SIM"]
 ignore = ["E501"]
+
+[tool.ruff.format]
+# Formatage compatible Black : guillemets doubles, fin de fichier avec newline,
+# indentation 4 espaces. `ruff format` est un remplacement drop-in de Black,
+# 30x plus rapide, déjà installé via ruff.
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"

@@ -22,7 +22,6 @@ from src.analysis import (
     StatsAnalyzer,
 )
 
-
 # ---------- Fixtures ----------
 
 @pytest.fixture

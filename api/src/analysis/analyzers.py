@@ -9,25 +9,16 @@ les implémentations concrètes fournissent la logique.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
-from typing import Any, Mapping
+from collections.abc import Mapping
+from typing import Any
 
 import numpy as np
 from numpy.typing import NDArray
 from scipy.signal import find_peaks
 
 
-# --- Résultats typés ---
-
-@dataclass(frozen=True, slots=True)
-class Vec3Stats:
-    mean: tuple[float, float, float]
-    std: tuple[float, float, float]
-    min: tuple[float, float, float]
-    max: tuple[float, float, float]
-
-
 # --- Contrat abstrait ---
+
 
 class TrajectoryAnalyzer(ABC):
     """Analyse une trajectoire 3D (N, 3) avec un pas temporel dt."""
@@ -41,6 +32,7 @@ class TrajectoryAnalyzer(ABC):
 
 
 # --- Implémentations concrètes ---
+
 
 class StatsAnalyzer(TrajectoryAnalyzer):
     """Moyenne, écart-type, min, max par axe. Trivial mais utile."""
@@ -56,9 +48,9 @@ class StatsAnalyzer(TrajectoryAnalyzer):
         maxs = trajectory.max(axis=0)
         return {
             "mean": {"x": float(means[0]), "y": float(means[1]), "z": float(means[2])},
-            "std":  {"x": float(stds[0]),  "y": float(stds[1]),  "z": float(stds[2])},
-            "min":  {"x": float(mins[0]),  "y": float(mins[1]),  "z": float(mins[2])},
-            "max":  {"x": float(maxs[0]),  "y": float(maxs[1]),  "z": float(maxs[2])},
+            "std": {"x": float(stds[0]), "y": float(stds[1]), "z": float(stds[2])},
+            "min": {"x": float(mins[0]), "y": float(mins[1]), "z": float(mins[2])},
+            "max": {"x": float(maxs[0]), "y": float(maxs[1]), "z": float(maxs[2])},
         }
 
 
@@ -99,8 +91,8 @@ class SpectralAnalyzer(TrajectoryAnalyzer):
         if spectrum.size > target:
             # Agrégation par moyennes de blocs — préserve les pics mieux que le subsample.
             edges = np.linspace(0, spectrum.size, target + 1, dtype=int)
-            down_amp = np.array([spectrum[edges[i]:edges[i + 1]].mean() for i in range(target)])
-            down_freq = np.array([freqs[edges[i]:edges[i + 1]].mean() for i in range(target)])
+            down_amp = np.array([spectrum[edges[i] : edges[i + 1]].mean() for i in range(target)])
+            down_freq = np.array([freqs[edges[i] : edges[i + 1]].mean() for i in range(target)])
         else:
             down_amp = spectrum
             down_freq = freqs
