@@ -1,4 +1,4 @@
-.PHONY: help up down logs build test test-frontend test-api lint clean
+.PHONY: help up down logs build test test-frontend test-api lint format fix clean
 
 help:
 	@echo "Commandes disponibles :"
@@ -9,7 +9,9 @@ help:
 	@echo "  make test          — lance tous les tests (frontend + api)"
 	@echo "  make test-frontend — tests Vitest côté TypeScript"
 	@echo "  make test-api      — tests pytest côté Python"
-	@echo "  make lint          — lint Python (ruff)"
+	@echo "  make lint          — lint Python (ruff check)"
+	@echo "  make format        — formate Python (ruff format)"
+	@echo "  make fix           — lint + format avec auto-corrections"
 	@echo "  make clean         — supprime dist/, node_modules/, __pycache__/"
 
 up:
@@ -37,6 +39,12 @@ test-api:
 
 lint:
 	cd api && ruff check src tests
+
+format:
+	cd api && ruff format src tests
+
+fix:
+	cd api && ruff check --fix src tests && ruff format src tests
 
 clean:
 	rm -rf frontend/dist frontend/node_modules
