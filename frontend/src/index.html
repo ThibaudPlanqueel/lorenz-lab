@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- SEO -->
+<title>Thibaud Planqueel — ML Engineer · Python &amp; Chaotic Dynamics</title>
+<meta name="description" content="ML Engineer et Data Scientist R&amp;D. Je construis des backends Python robustes, des pipelines fiables et des interfaces qui rendent les calculs complexes accessibles — santé numérique, énergie, environnement, éducation.">
+<meta name="author" content="Thibaud Planqueel">
+<meta name="color-scheme" content="light">
+
+<!-- Open Graph / LinkedIn / WhatsApp -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Thibaud Planqueel — ML Engineer · Python &amp; Chaotic Dynamics">
+<meta property="og:description" content="ML Engineer et Data Scientist R&amp;D. Python, FastAPI, MLOps, biosignaux. Du code clair pour des sujets qui ont du sens.">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:url" content="https://thibaudplanqueel.github.io">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Thibaud Planqueel — ML Engineer · Python &amp; Chaotic Dynamics">
+<meta name="twitter:description" content="ML Engineer et Data Scientist R&amp;D. Python, FastAPI, MLOps, biosignaux.">
+
+<!-- KaTeX (formules mathématiques) — avec fallback propre si le CDN tombe -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
+      integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+"
+      crossorigin="anonymous"
+      onerror="document.documentElement.classList.add('no-katex')">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"
+        integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg"
+        crossorigin="anonymous"
+        onerror="document.documentElement.classList.add('no-katex')"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+        integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk"
+        crossorigin="anonymous"
+        onload="renderMathInElement(document.body);"
+        onerror="document.documentElement.classList.add('no-katex')"></script>
+
+<!-- Plotly (graphs d'analyse) — version "basic" plus légère (~350 ko gzip) -->
+<script defer src="https://cdn.jsdelivr.net/npm/plotly.js-basic-dist-min@2.35.2/plotly-basic.min.js"
+        crossorigin="anonymous"></script>
+
+<style>
+  :root {
+    --paper: #faf7f2;
+    --ink: #1c1917;          /* 16.4 contrast — AAA */
+    --body: #292524;         /* 14.2 contrast — AAA */
+    --amber: #b84a10;        /* accent visuel, 4.88 — AA */
+    --amber-text: #96380c;   /* liens et texte lisible, 6.85 — AA+ proche AAA */
+    --muted: #57534e;        /* 7.14 — AAA */
+    --muted-soft: #6b615a;   /* 5.64 — AA (ex #78716c qui échouait) */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--paper);
+    color: var(--body);
+    font: 17px/1.68 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 5rem;
+  }
+  h1, h2, h3 {
+    font-family: ui-serif, Georgia, "Times New Roman", serif;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+  }
+  h1 { font-size: 2.4rem; line-height: 1.05; }
+  h2 { font-size: 1.2rem; margin: 3rem 0 0.8rem; }
+  h3 { font-size: 1.05rem; margin: 2rem 0 0.6rem; }
+  h2::before { content: "§  "; color: var(--amber); font-weight: 400; }
+
+  p { color: var(--body); }
+  p + p { margin-top: 0.85rem; }
+  p.small { font-size: 0.92rem; color: var(--muted); font-style: italic; }
+
+  strong { color: var(--ink); font-weight: 600; }
+  em { color: var(--ink); }
+
+  .hero {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+  }
+  .hero-text { flex: 1; min-width: 0; }
+  .subtitle {
+    color: var(--muted);
+    margin: 0.55rem 0 1.4rem;
+    font-size: 1rem;
+  }
+  canvas.attractor {
+    width: 130px;
+    height: 130px;
+    flex-shrink: 0;
+    background: var(--paper);
+  }
+
+  a {
+    color: var(--amber-text);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(150, 56, 12, 0.3);
+    transition: border-color .18s ease;
+  }
+  a:hover { border-bottom-color: var(--amber-text); }
+  a:focus-visible {
+    outline: 2px solid var(--amber);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.88em;
+    color: var(--amber-text);
+    background: rgba(184, 74, 16, 0.07);
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+  }
+
+  .aside {
+    color: var(--muted);
+    font-style: italic;
+    font-size: 0.96rem;
+    margin-top: 0.9rem;
+    padding-left: 0.9rem;
+    border-left: 2px solid rgba(184, 74, 16, 0.4);
+  }
+  .aside code { font-style: normal; }
+
+  /* --- Contrôles --- */
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0;
+  }
+  button {
+    font: inherit;
+    font-size: 0.9rem;
+    padding: 0.45rem 0.9rem;
+    border: 1px solid rgba(184, 74, 16, 0.35);
+    background: transparent;
+    color: var(--ink);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background .15s ease, color .15s ease;
+  }
+  button:hover:not(:disabled) { background: rgba(184, 74, 16, 0.08); }
+  button:focus-visible {
+    outline: 2px solid var(--amber);
+    outline-offset: 2px;
+  }
+  button.active {
+    background: var(--amber);
+    color: var(--paper);
+    border-color: var(--amber);
+  }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  pre#analysis-output {
+    font: 0.84rem/1.55 ui-monospace, SFMono-Regular, Menlo, monospace;
+    background: rgba(184, 74, 16, 0.04);
+    border: 1px solid rgba(184, 74, 16, 0.15);
+    border-radius: 4px;
+    padding: 0.9rem 1.1rem;
+    margin-top: 0.8rem;
+    white-space: pre-wrap;
+    color: var(--body);
+    min-height: 2.5rem;
+  }
+  pre#analysis-output:empty::before {
+    content: "— Choisis un système, laisse la trajectoire se remplir, puis clique sur Analyser.";
+    color: var(--muted-soft);
+    font-style: italic;
+  }
+
+  /* --- Graphs Plotly --- */
+  .plots { margin-top: 1.2rem; }
+  .plot-slot {
+    margin: 0.8rem 0 1.2rem;
+    border: 1px solid rgba(184, 74, 16, 0.12);
+    border-radius: 4px;
+    background: var(--paper);
+    overflow: hidden;
+    min-height: 60px;
+  }
+  .plot-slot:empty { display: none; }
+  .plot-caption {
+    font-size: 0.82rem;
+    color: var(--muted);
+    font-style: italic;
+    margin: -0.4rem 0 1rem;
+    padding-left: 0.1rem;
+  }
+
+  /* --- Bloc Maths (KaTeX) --- */
+  .maths {
+    margin-top: 1.6rem;
+    padding: 0.2rem 0 0.6rem;
+  }
+  .maths-item { margin: 0.7rem 0 1rem; }
+  .maths-label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--amber-text);
+    margin-bottom: 0.3rem;
+  }
+  .maths .katex-display {
+    margin: 0.3rem 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  .katex-dynamic {
+    min-height: 2.8rem;
+    transition: opacity 0.18s ease;
+  }
+  .katex-dynamic:empty::before {
+    content: "chargement des équations…";
+    color: var(--muted-soft);
+    font-style: italic;
+    font-size: 0.9rem;
+  }
+
+  /* Fallback si KaTeX ne charge pas : on affiche le LaTeX brut en mono */
+  .no-katex .maths .katex-display,
+  .no-katex .maths .katex {
+    display: none;
+  }
+  .no-katex .maths-item::after {
+    display: block;
+    content: "(formule — KaTeX non chargé)";
+    color: var(--muted-soft);
+    font-family: ui-monospace, monospace;
+    font-size: 0.82rem;
+    font-style: italic;
+    padding-left: 0.2rem;
+    margin-top: 0.2rem;
+  }
+  .no-katex .katex-dynamic:empty::before {
+    content: "(équation du système courant — rendu désactivé)";
+  }
+
+  /* --- Autres projets --- */
+  .projects {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+    margin-top: 0.6rem;
+  }
+  .project {
+    display: flex;
+    align-items: baseline;
+    gap: 0.9rem;
+    padding: 0.55rem 0.8rem;
+    border: 1px solid rgba(184, 74, 16, 0.15);
+    border-radius: 4px;
+    background: rgba(184, 74, 16, 0.025);
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.96rem;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .project.available {
+    color: var(--ink);
+    border-color: rgba(184, 74, 16, 0.35);
+    border-bottom: 1px solid rgba(184, 74, 16, 0.35);
+  }
+  .project.available:hover {
+    background: rgba(184, 74, 16, 0.08);
+    border-color: var(--amber);
+  }
+  .project.coming {
+    cursor: not-allowed;
+    opacity: 0.65;
+  }
+  .project-name {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.92rem;
+    color: var(--amber-text);
+    font-weight: 500;
+    flex-shrink: 0;
+    min-width: 6.5rem;
+  }
+  .project-desc { flex: 1; color: inherit; }
+  .project-status {
+    font-size: 0.78rem;
+    font-style: italic;
+    color: var(--muted-soft);
+    flex-shrink: 0;
+  }
+
+  .stack { color: var(--muted); font-size: 0.97rem; }
+  .stack span { display: inline-block; margin: 0 0.7rem 0.3rem 0; }
+  .stack .sep { color: var(--amber); margin: 0 0.1rem; }
+
+  .rule {
+    width: 1.8rem;
+    height: 1px;
+    background: var(--amber);
+    margin: 2.8rem 0 1rem;
+    opacity: 0.7;
+  }
+  footer {
+    color: var(--muted-soft);
+    font-size: 0.87rem;
+    font-style: italic;
+  }
+
+  @media (max-width: 560px) {
+    body { padding: 2.8rem 1.25rem 3.5rem; }
+    h1 { font-size: 1.9rem; }
+    .hero { flex-direction: column-reverse; gap: 1rem; }
+    canvas.attractor { width: 110px; height: 110px; align-self: flex-end; }
+    .project { flex-wrap: wrap; }
+    .project-name { min-width: 0; }
+  }
+
+  /* Respect des préférences utilisateur */
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-text">
+    <h1>Thibaud Planqueel</h1>
+    <p class="subtitle">ML Engineer · Backend Python · MLOps</p>
+    <p>
+      J'aime créer des systèmes qui durent. Des backends clairs et robustes, des pipelines fiables
+      et des interfaces qui rendent des calculs complexes accessibles. Mon terrain principal, c'est
+      le Python (FastAPI, NumPy/SciPy, Airflow, Docker, Kafka), mais je passe naturellement en
+      TypeScript quand il faut une animation réactive ou un calcul côté client.
+    </p>
+  </div>
+  <canvas class="attractor" aria-hidden="true"></canvas>
+</section>
+
+<h2>Ce qui me motive</h2>
+<p>
+  Travailler sur des sujets qui ont du sens.
+  Des domaines où le code peut contribuer à quelque chose de positif et d'utile pour demain.
+</p>
+<p>
+  Et surtout, je fais attention à une chose : quand je reviens sur un projet neuf mois plus tard,
+  je veux pouvoir le relire sans me gratter la tête. C'est pour ça que je structure toujours mon
+  code avec des abstractions claires, des tests et une architecture qui reste agréable à maintenir.
+</p>
+
+<h2>Comment j'aime coder</h2>
+<p>
+  Je pense d'abord en contrats et en abstractions claires. Ça rend le code plus lisible, plus facile
+  à tester et surtout beaucoup plus agréable quand on y revient des mois plus tard. Que ce soit
+  pour des pipelines de données en production ou un petit labo de chaos, je vise toujours la même
+  chose : du code qu'on peut faire évoluer sans stress.
+</p>
+
+<h2>Petit labo : systèmes dynamiques chaotiques</h2>
+<p>
+  Un projet full-stack que j'ai conçu pour explorer trois attracteurs étranges (Lorenz, Rössler,
+  Chua) de manière à la fois visuelle et scientifique.
+</p>
+<p>
+  Côté frontend : une animation fluide en Canvas + TypeScript avec un intégrateur RK4 générique.
+  Une classe abstraite <code>DynamicalSystem</code> définit le contrat, et chaque système (Lorenz,
+  etc.) n'implémente que sa dérivée et ses hints de vue. Ajouter un nouveau système prend moins
+  de 30 lignes.
+</p>
+<p>
+  Côté backend : une petite API FastAPI + NumPy/SciPy qui analyse la trajectoire (statistiques,
+  FFT pour repérer les fréquences dominantes, et estimation de l'exposant de Lyapunov maximal
+  via la méthode de Rosenstein). Même philosophie d'abstraction avec une classe
+  <code>TrajectoryAnalyzer</code> et un composite pattern.
+</p>
+<p>
+  Le tout est conteneurisé (Docker multi-stage), testé (Vitest + pytest), et servi via nginx qui
+  proxifie les appels API. <strong>Démo live ci-dessous</strong> et code complet sur
+  <a href="https://github.com/thibaudplanqueel/lorenz-lab" target="_blank" rel="noopener">GitHub</a>.
+</p>
+<p class="small">
+  Ce projet illustre bien ma façon de travailler : combiner calcul scientifique, architecture
+  propre et expérience utilisateur soignée, tout en gardant le code lisible et extensible sur
+  le long terme.
+</p>
+
+<div class="controls" role="group" aria-label="Sélection du système dynamique">
+  <button data-system="lorenz" class="active" aria-pressed="true">Lorenz</button>
+  <button data-system="rossler" aria-pressed="false">Rössler</button>
+  <button data-system="chua" aria-pressed="false">Chua</button>
+  <button id="analyze" aria-label="Analyser la trajectoire courante">Analyser</button>
+</div>
+<pre id="analysis-output" aria-live="polite" aria-label="Résultats d'analyse"></pre>
+
+<div class="plots">
+  <h3>Spectre</h3>
+  <div id="spectrum-plot" class="plot-slot" aria-label="Graphe du spectre de puissance"></div>
+  <p class="plot-caption">
+    FFT de la composante x, avec les pics spectraux marqués. Un spectre large
+    et continu trahit un comportement chaotique ; un pic net révélerait
+    une composante périodique.
+  </p>
+
+  <h3>Divergence de Lyapunov</h3>
+  <div id="lyapunov-plot" class="plot-slot" aria-label="Graphe de la divergence de Lyapunov"></div>
+  <p class="plot-caption">
+    Logarithme moyen de la divergence entre paires de voisins initialement proches,
+    en fonction du temps. La pente (en pointillé) donne l'exposant de Lyapunov
+    maximal — positif pour un système chaotique.
+  </p>
+</div>
+
+<div class="maths">
+  <div class="maths-item">
+    <span class="maths-label">Système dynamique</span>
+    $$ \dot{\mathbf{x}}(t) = f\bigl(\mathbf{x}(t)\bigr), \quad \mathbf{x} \in \mathbb{R}^3 $$
+  </div>
+
+  <div class="maths-item">
+    <span class="maths-label" id="system-equation-label">Lorenz (1963) — la dérivée implémentée</span>
+    <div id="system-equation-formula" class="katex-dynamic"></div>
+  </div>
+
+  <div class="maths-item">
+    <span class="maths-label">RK4 — l'intégrateur générique (abstrait)</span>
+    $$ \mathbf{x}_{n+1} = \mathbf{x}_n + \tfrac{h}{6}\bigl(k_1 + 2k_2 + 2k_3 + k_4\bigr) $$
+  </div>
+
+  <div class="maths-item">
+    <span class="maths-label">Spectre — FFT de la composante x</span>
+    $$ \hat{x}(f) = \sum_{n=0}^{N-1} x_n \, e^{-2i\pi f n / N} $$
+  </div>
+
+  <div class="maths-item">
+    <span class="maths-label">Lyapunov (Rosenstein 1993)</span>
+    $$ \lambda \approx \tfrac{1}{\Delta t} \cdot \frac{d}{dk}\bigl\langle \ln \lVert \boldsymbol{\delta}_k \rVert \bigr\rangle $$
+  </div>
+</div>
+
+<p class="aside">
+  Architecture : une classe abstraite <code>DynamicalSystem</code> (contrat + RK4 générique),
+  trois implémentations concrètes, un <code>SystemFactory</code> et un <code>AttractorSketch</code>
+  qui lit les hints de vue de chaque système. Côté API, un <code>TrajectoryAnalyzer</code>
+  abstrait avec trois implémentations composables. Code complet :
+  <a href="https://github.com/thibaudplanqueel/lorenz-lab" target="_blank" rel="noopener">github.com/thibaudplanqueel/lorenz-lab</a>.
+</p>
+
+<h2>Stack</h2>
+<p class="stack">
+  Python <span class="sep">·</span> FastAPI <span class="sep">·</span> Pydantic
+  <span class="sep">·</span> Airflow <span class="sep">·</span> MLflow
+  <span class="sep">·</span> Docker <span class="sep">·</span> Kafka
+  <span class="sep">·</span> PostgreSQL <span class="sep">·</span> MongoDB
+  <br>
+  TypeScript <span class="sep">·</span> React <span class="sep">·</span> Node.js
+  <span class="sep">·</span> GitHub Actions
+</p>
+
+<h2>Contact</h2>
+<p>
+  <a href="mailto:planqueelthibaud@hotmail.fr">planqueelthibaud@hotmail.fr</a><br>
+  Agde, France
+</p>
+
+<div class="rule"></div>
+
+<script type="module" src="./main.js"></script>
+</body>
+</html>
