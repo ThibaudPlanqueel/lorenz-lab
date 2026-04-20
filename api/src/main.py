@@ -6,8 +6,6 @@ Toute la logique métier est dans `analysis.analyzers` — ce fichier ne
 fait que le routing et l'orchestration.
 """
 
-from __future__ import annotations
-
 import math
 
 import numpy as np

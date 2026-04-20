@@ -5,8 +5,6 @@ Schémas Pydantic pour l'API. Isolés ici pour que main.py reste focalisé
 sur le routing et ne se mélange pas avec la validation.
 """
 
-from __future__ import annotations
-
 from pydantic import BaseModel, Field
 
 

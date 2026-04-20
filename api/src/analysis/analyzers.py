@@ -6,8 +6,6 @@ Même philosophie que côté TypeScript : l'abstraction définit la forme,
 les implémentations concrètes fournissent la logique.
 """
 
-from __future__ import annotations
-
 from abc import ABC, abstractmethod
 from collections.abc import Mapping
 from typing import Any

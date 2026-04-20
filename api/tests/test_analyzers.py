@@ -10,8 +10,6 @@ L'idée : vérifier que les analyseurs captent des propriétés
 mesurables, pas juste qu'ils renvoient un dict.
 """
 
-from __future__ import annotations
-
 import numpy as np
 import pytest
 
