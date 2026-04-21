@@ -5,7 +5,7 @@ Le front TypeScript anime les trajectoires côté client, une mini-API Python
 calcule des métriques d'analyse (stats, pics spectraux, exposant de Lyapunov),
 et deux graphs Plotly légers rendent les résultats lisibles d'un coup d'œil.
 Chaque bloc de résultats est accompagné d'une petite lecture commentée
-qui explique ce qu'on voit — le but est de rendre le chaos *lisible*,
+qui explique ce qu'on voit — le but est de rendre le chaos _lisible_,
 pas juste calculé.
 
 Sert aussi de **vitrine d'architecture** : abstractions-first des deux côtés
@@ -21,9 +21,9 @@ conteneurisé, testé, CI.
 **→ [thibaudplanqueel.github.io/lorenz-lab](https://thibaudplanqueel.github.io/lorenz-lab/)**
 
 L'animation Canvas, le choix des systèmes, les formules KaTeX et la structure
-générale tournent côté client. Le bouton *Analyser* est désactivé sur la démo
+générale tournent côté client. Le bouton _Analyser_ est désactivé sur la démo
 en ligne (pas de backend Python sur GitHub Pages) — pour l'activer, voir
-*Démarrage complet* ci-dessous.
+_Démarrage complet_ ci-dessous.
 
 ---
 
@@ -112,11 +112,11 @@ combinaison d'analyseurs peut être exécutée en une seule passe.
 
 ## Endpoints
 
-| Méthode | Route      | Description                              |
-|---------|------------|------------------------------------------|
-| `GET`   | `/health`  | Vérification de vie du service           |
+| Méthode | Route      | Description                                      |
+| ------- | ---------- | ------------------------------------------------ |
+| `GET`   | `/health`  | Vérification de vie du service                   |
 | `GET`   | `/systems` | Liste des systèmes supportés et leurs paramètres |
-| `POST`  | `/analyze` | Analyse une trajectoire (points + dt)    |
+| `POST`  | `/analyze` | Analyse une trajectoire (points + dt)            |
 
 Exemple de requête :
 
@@ -136,18 +136,3 @@ curl -X POST http://localhost:8080/api/analyze \
 **Frontend** : TypeScript 5.5 · Plotly.js basic · Vitest · nginx alpine
 **Backend** : Python 3.12 · FastAPI · Pydantic · NumPy · SciPy · pytest · ruff
 **Infra** : Docker multi-stage · docker-compose · GitHub Actions
-
----
-
-## Pourquoi cet étage d'architecture pour si peu de code ?
-
-Parce qu'à petite échelle, un projet propre montre surtout comment on
-*pense* une architecture. Les abstractions ne servent pas à rien ici —
-elles gardent la porte ouverte sans coûter plus cher aujourd'hui :
-
-- Ajouter Lotka–Volterra ? Une classe, trois lignes dans la factory.
-- Ajouter une analyse de dimension fractale ? Un `FractalDimensionAnalyzer`
-  qui s'ajoute au composite, zéro ligne à modifier ailleurs.
-- Basculer le renderer sur WebGL ? Le contrat `AttractorSketch` ne change pas.
-
-C'est le genre de discipline que j'aime appliquer à plus grande échelle.
