@@ -336,62 +336,12 @@
   <div class="hero-text">
     <h1>Thibaud Planqueel</h1>
     <p class="subtitle">ML Engineer · Backend Python · MLOps</p>
-    <p>
-      J'aime créer des systèmes qui durent. Des backends clairs et robustes, des pipelines fiables
-      et des interfaces qui rendent des calculs complexes accessibles. Mon terrain principal, c'est
-      le Python (FastAPI, NumPy/SciPy, Airflow, Docker, Kafka), mais je passe naturellement en
-      TypeScript quand il faut une animation réactive ou un calcul côté client.
+    <p>Code complet :
+      <a href="https://github.com/thibaudplanqueel/lorenz-lab" target="_blank" rel="noopener">github.com/thibaudplanqueel/lorenz-lab</a>.
     </p>
   </div>
   <canvas class="attractor" aria-hidden="true"></canvas>
 </section>
-
-<h2>Ce qui me motive</h2>
-<p>
-  Travailler sur des sujets qui ont du sens.
-  Des domaines où le code peut contribuer à quelque chose de positif et d'utile pour demain.
-</p>
-<p>
-  Et surtout, je fais attention à une chose : quand je reviens sur un projet neuf mois plus tard,
-  je veux pouvoir le relire sans me gratter la tête. C'est pour ça que je structure toujours mon
-  code avec des abstractions claires, des tests et une architecture qui reste agréable à maintenir.
-</p>
-
-<h2>Comment j'aime coder</h2>
-<p>
-  Je pense d'abord en contrats et en abstractions claires. Ça rend le code plus lisible, plus facile
-  à tester et surtout beaucoup plus agréable quand on y revient des mois plus tard. Que ce soit
-  pour des pipelines de données en production ou un petit labo de chaos, je vise toujours la même
-  chose : du code qu'on peut faire évoluer sans stress.
-</p>
-
-<h2>Petit labo : systèmes dynamiques chaotiques</h2>
-<p>
-  Un projet full-stack que j'ai conçu pour explorer trois attracteurs étranges (Lorenz, Rössler,
-  Chua) de manière à la fois visuelle et scientifique.
-</p>
-<p>
-  Côté frontend : une animation fluide en Canvas + TypeScript avec un intégrateur RK4 générique.
-  Une classe abstraite <code>DynamicalSystem</code> définit le contrat, et chaque système (Lorenz,
-  etc.) n'implémente que sa dérivée et ses hints de vue. Ajouter un nouveau système prend moins
-  de 30 lignes.
-</p>
-<p>
-  Côté backend : une petite API FastAPI + NumPy/SciPy qui analyse la trajectoire (statistiques,
-  FFT pour repérer les fréquences dominantes, et estimation de l'exposant de Lyapunov maximal
-  via la méthode de Rosenstein). Même philosophie d'abstraction avec une classe
-  <code>TrajectoryAnalyzer</code> et un composite pattern.
-</p>
-<p>
-  Le tout est conteneurisé (Docker multi-stage), testé (Vitest + pytest), et servi via nginx qui
-  proxifie les appels API. <strong>Démo live ci-dessous</strong> et code complet sur
-  <a href="https://github.com/thibaudplanqueel/lorenz-lab" target="_blank" rel="noopener">GitHub</a>.
-</p>
-<p class="small">
-  Ce projet illustre bien ma façon de travailler : combiner calcul scientifique, architecture
-  propre et expérience utilisateur soignée, tout en gardant le code lisible et extensible sur
-  le long terme.
-</p>
 
 <div class="controls" role="group" aria-label="Sélection du système dynamique">
   <button data-system="lorenz" class="active" aria-pressed="true">Lorenz</button>
@@ -445,31 +395,6 @@
     $$ \lambda \approx \tfrac{1}{\Delta t} \cdot \frac{d}{dk}\bigl\langle \ln \lVert \boldsymbol{\delta}_k \rVert \bigr\rangle $$
   </div>
 </div>
-
-<p class="aside">
-  Architecture : une classe abstraite <code>DynamicalSystem</code> (contrat + RK4 générique),
-  trois implémentations concrètes, un <code>SystemFactory</code> et un <code>AttractorSketch</code>
-  qui lit les hints de vue de chaque système. Côté API, un <code>TrajectoryAnalyzer</code>
-  abstrait avec trois implémentations composables. Code complet :
-  <a href="https://github.com/thibaudplanqueel/lorenz-lab" target="_blank" rel="noopener">github.com/thibaudplanqueel/lorenz-lab</a>.
-</p>
-
-<h2>Stack</h2>
-<p class="stack">
-  Python <span class="sep">·</span> FastAPI <span class="sep">·</span> Pydantic
-  <span class="sep">·</span> Airflow <span class="sep">·</span> MLflow
-  <span class="sep">·</span> Docker <span class="sep">·</span> Kafka
-  <span class="sep">·</span> PostgreSQL <span class="sep">·</span> MongoDB
-  <br>
-  TypeScript <span class="sep">·</span> React <span class="sep">·</span> Node.js
-  <span class="sep">·</span> GitHub Actions
-</p>
-
-<h2>Contact</h2>
-<p>
-  <a href="mailto:planqueelthibaud@hotmail.fr">planqueelthibaud@hotmail.fr</a><br>
-  Agde, France
-</p>
 
 <div class="rule"></div>
 
